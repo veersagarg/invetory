@@ -43,8 +43,3 @@ public class ProductController {
 		return service.findByName( name );
 	}
 }
-
-
-
-
-
