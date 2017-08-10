@@ -37,9 +37,8 @@ $ docker run -p 8080:8080 --env DATABASE_URL=<DATABASE_URL> --env DATABASE_USER=
 ### POST /products
 ```console
 $ curl -X POST https://keepinventory.herokuapp.com/products \
-  -d "name=Ball" \
-  -d  "description=Soccer ball" \
-  -d "quantity=10"
+  -H "Content-Type: application/json" \
+  -d '{"name":"Ball","description":"Soccer ball","quantity":10}'
 ```
 
 ### GET /products/{id}
