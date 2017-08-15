@@ -21,10 +21,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@SequenceGenerator(name="seq_product", sequenceName="seq_product", allocationSize = 1)
 public class Product {
 
 	@Id
-	@SequenceGenerator(name="seq_product", sequenceName="seq_product")
 	@GeneratedValue(generator="seq_product", strategy= GenerationType.SEQUENCE)
 	private Long id;
 
