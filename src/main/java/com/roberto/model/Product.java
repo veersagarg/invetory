@@ -8,7 +8,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,16 +15,15 @@ import lombok.NoArgsConstructor;
  * Created by roberto on 02/08/17.
  */
 @Entity
-@Table(name="products")
+@Table(name = "products")
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@SequenceGenerator(name="seq_product", sequenceName="seq_product", allocationSize = 1)
+@SequenceGenerator(name = "seq_product", sequenceName = "seq_product", allocationSize = 1)
 public class Product {
 
 	@Id
-	@GeneratedValue(generator="seq_product", strategy= GenerationType.SEQUENCE)
+	@GeneratedValue(generator = "seq_product", strategy = GenerationType.SEQUENCE)
 	private Long id;
 
 	private String name;
