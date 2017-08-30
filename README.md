@@ -43,20 +43,27 @@ $ curl -X POST https://keepinventory.herokuapp.com/products \
 
 ### GET /products/{id}
 ```console
-$ curl -X GET https://keepinventory.herokuapp.com/products/50
+$ curl -X GET https://keepinventory.herokuapp.com/products/2
 ```
 ```json
 {
-   id: 50,
+   id: 2,
    name: "Ball",
    description: "Soccer ball",
    quantity: 10
 }
 ```
 
+### PUT /products
+```console
+$ curl -X PUT https://keepinventory.herokuapp.com/products/2 \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Ball","description":"Soccer ball","quantity":11}'
+```
+
 ### DELETE /products/{id}
 ```console
-$ curl -X DELETE https://keepinventory.herokuapp.com/products/50
+$ curl -X DELETE https://keepinventory.herokuapp.com/products/2
 ```
 
 ### GET /products/find/{name}
@@ -64,12 +71,14 @@ $ curl -X DELETE https://keepinventory.herokuapp.com/products/50
 $ curl -X GET https://keepinventory.herokuapp.com/products/find/Ball
 ```
 ```json
-{
-   id: 50,
-   name: "Ball",
-   description: "Soccer ball",
-   quantity: 10
-}
+[
+	{
+	   id: 2,
+	   name: "Ball",
+	   description: "Soccer ball",
+	   quantity: 10
+	}
+]
 ```
 
 ## License
