@@ -1,16 +1,19 @@
 package com.roberto.service;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import com.roberto.dto.ProductDTO;
 import com.roberto.model.Product;
 import com.roberto.repository.ProductRepository;
 
@@ -36,55 +39,53 @@ public class ProductServiceTest {
 	}
 
 	@Test
-	public void save(){
-		Product product = mockProduct();
-		service.save( product );
-		Mockito.verify(repository).save( product );
+	public void save() {
+		service.save( mockProductDTO() );
+		verify( repository ).save( mockProduct( null ) );
 	}
 
 	@Test
-	public void get(){
-		Mockito.when( repository.findOne( PRODUCT_ID )).thenReturn( mockProduct(PRODUCT_ID) );
-		Product product = service.findOne( PRODUCT_ID );
-
-		assertProduct(product);
+	public void update() {
+		service.update( PRODUCT_ID, mockProductDTO() );
+		verify( repository ).save( mockProduct( PRODUCT_ID ) );
 	}
 
 	@Test
-	public void delete(){
+	public void delete() {
 		service.delete( PRODUCT_ID );
-		Mockito.verify(repository).delete( PRODUCT_ID );
+		verify( repository ).delete( PRODUCT_ID );
 	}
 
 	@Test
-	public void findByName(){
-		Mockito.when( repository.findByName( PRODUCT_NAME )).thenReturn( Collections.singletonList(mockProduct(PRODUCT_ID)) );
-		List<Product> products = service.findByName( PRODUCT_NAME );
-		Product product = products.get( 0 );
+	public void get() {
+		when( repository.findOne( PRODUCT_ID ) ).thenReturn( mockProduct( PRODUCT_ID ) );
+		ProductDTO productDTO = service.findOne( PRODUCT_ID );
 
-		Assert.assertEquals( products.size(), 1 );
-		assertProduct(product);
+		assertProduct( productDTO );
 	}
 
-	private void assertProduct(Product product){
-		Assert.assertEquals( PRODUCT_ID, product.getId(), 0 );
-		Assert.assertEquals( PRODUCT_NAME, product.getName());
-		Assert.assertEquals( PRODUCT_DESCRIPTION, product.getDescription() );
-		Assert.assertEquals( PRODUCT_QUANTITY, product.getQuantity(), 0 );
+	@Test
+	public void findByName() {
+		when( repository.findByName( PRODUCT_NAME ) )
+				.thenReturn( Collections.singletonList( mockProduct( PRODUCT_ID ) ) );
+		List<ProductDTO> productsDTO = service.findByName( PRODUCT_NAME );
+
+		assertEquals( productsDTO.size(), 1 );
+		assertProduct( productsDTO.get( 0 ) );
 	}
 
-	private Product mockProduct(Long id){
-		Product product = mockProduct();
-		product.setId( id );
-		return  product;
+	private void assertProduct(ProductDTO productDTO) {
+		assertEquals( PRODUCT_ID, productDTO.getId(), 0 );
+		assertEquals( PRODUCT_NAME, productDTO.getName() );
+		assertEquals( PRODUCT_DESCRIPTION, productDTO.getDescription() );
+		assertEquals( PRODUCT_QUANTITY, productDTO.getQuantity(), 0 );
 	}
 
-	private Product mockProduct(){
-		return Product.builder()
-				.name( PRODUCT_NAME )
-				.description( PRODUCT_DESCRIPTION )
-				.quantity( PRODUCT_QUANTITY )
-				.build();
+	private Product mockProduct(Long productId) {
+		return new Product( productId, PRODUCT_NAME, PRODUCT_DESCRIPTION, PRODUCT_QUANTITY );
 	}
 
+	private ProductDTO mockProductDTO() {
+		return new ProductDTO( null, PRODUCT_NAME, PRODUCT_DESCRIPTION, PRODUCT_QUANTITY );
+	}
 }
