@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/robertoduessmann/inventory.svg?branch=master)](https://travis-ci.org/robertoduessmann/inventory)
 
 > Microservice to control a product inventory. <br>
-> Also, a Spring Boot REST app template, with Hibernate, PostgreSQL and Docker.
+> Also, a Spring Boot app template.
 
 
 ## Installation
