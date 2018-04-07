@@ -39,7 +39,8 @@ public class ProductService {
 
 	public List<ProductDTO> findByName(String name) {
 		List<Product> products = repository.findByName( name );
-		return products.stream().map( product -> ProductDTO.of( product ) )
+		return products.stream()
+				.map( ProductDTO::of )
 				.collect( Collectors.toList() );
 	}
 }
