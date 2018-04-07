@@ -19,14 +19,16 @@ public class ProductService {
 	@Autowired
 	private ProductRepository repository;
 
-	public void save(ProductDTO productDTO) {
-		repository.save( productDTO.toEntity() );
+	public ProductDTO save(ProductDTO productDTO) {
+		Product product = repository.save( productDTO.toEntity() );
+		return ProductDTO.of( product );
 	}
 
-	public void update(Long productId, ProductDTO productDTO) {
+	public ProductDTO update(Long productId, ProductDTO productDTO) {
 		Product product = productDTO.toEntity();
 		product.setId( productId );
-		repository.save( product );
+		Product updatedProduct = repository.save( product );
+		return ProductDTO.of( updatedProduct );
 	}
 
 	public void delete(Long productId) {
@@ -39,7 +41,8 @@ public class ProductService {
 
 	public List<ProductDTO> findByName(String name) {
 		List<Product> products = repository.findByName( name );
-		return products.stream().map( product -> ProductDTO.of( product ) )
+		return products.stream()
+				.map( ProductDTO::of )
 				.collect( Collectors.toList() );
 	}
 }

@@ -1,6 +1,7 @@
 # inventory
 
 [![Build Status](https://travis-ci.org/robertoduessmann/inventory.svg?branch=master)](https://travis-ci.org/robertoduessmann/inventory)
+[![codecov](https://codecov.io/gh/robertoduessmann/inventory/branch/master/graph/badge.svg)](https://codecov.io/gh/robertoduessmann/inventory)
 
 > Microservice to control a product inventory. <br>
 > Also, a Spring Boot app template.

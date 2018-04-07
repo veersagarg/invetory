@@ -1,5 +1,7 @@
 package com.roberto.service;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -7,11 +9,11 @@ import static org.mockito.Mockito.when;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import com.roberto.dto.ProductDTO;
 import com.roberto.model.Product;
@@ -20,12 +22,13 @@ import com.roberto.repository.ProductRepository;
 /**
  * Created by roberto on 08/08/17.
  */
+@RunWith(MockitoJUnitRunner.class)
 public class ProductServiceTest {
 
-	public static final long PRODUCT_ID = 1L;
-	public static final String PRODUCT_NAME = "Ball";
-	public static final String PRODUCT_DESCRIPTION = "Soccer ball";
-	public static final long PRODUCT_QUANTITY = 10L;
+	private static final long PRODUCT_ID = 1L;
+	private static final String PRODUCT_NAME = "Ball";
+	private static final String PRODUCT_DESCRIPTION = "Soccer ball";
+	private static final long PRODUCT_QUANTITY = 10L;
 
 	@InjectMocks
 	private ProductService service;
@@ -33,32 +36,40 @@ public class ProductServiceTest {
 	@Mock
 	private ProductRepository repository;
 
-	@Before
-	public void init() {
-		MockitoAnnotations.initMocks( this );
-	}
-
 	@Test
 	public void save() {
-		service.save( mockProductDTO() );
-		verify( repository ).save( mockProduct( null ) );
+		Product product = mockProduct( null );
+		Product savedProduct = mockProduct( PRODUCT_ID );
+		when( repository.save( product ) ).thenReturn( savedProduct );
+
+		ProductDTO savedProductDTO = service.save( mockProductDTO( null ) );
+
+		verify( repository ).save( product );
+		assertThat( savedProductDTO, equalTo( mockProductDTO( PRODUCT_ID ) ) );
 	}
 
 	@Test
 	public void update() {
-		service.update( PRODUCT_ID, mockProductDTO() );
+		Product product = mockProduct( PRODUCT_ID );
+		when( repository.save( product ) ).thenReturn( product );
+
+		ProductDTO updatedProductDTO = service.update( PRODUCT_ID, mockProductDTO( null ) );
+
 		verify( repository ).save( mockProduct( PRODUCT_ID ) );
+		assertThat( updatedProductDTO, equalTo( mockProductDTO( PRODUCT_ID ) ) );
 	}
 
 	@Test
 	public void delete() {
 		service.delete( PRODUCT_ID );
+
 		verify( repository ).delete( PRODUCT_ID );
 	}
 
 	@Test
 	public void get() {
 		when( repository.findOne( PRODUCT_ID ) ).thenReturn( mockProduct( PRODUCT_ID ) );
+
 		ProductDTO productDTO = service.findOne( PRODUCT_ID );
 
 		assertProduct( productDTO );
@@ -68,6 +79,7 @@ public class ProductServiceTest {
 	public void findByName() {
 		when( repository.findByName( PRODUCT_NAME ) )
 				.thenReturn( Collections.singletonList( mockProduct( PRODUCT_ID ) ) );
+
 		List<ProductDTO> productsDTO = service.findByName( PRODUCT_NAME );
 
 		assertEquals( productsDTO.size(), 1 );
@@ -85,7 +97,7 @@ public class ProductServiceTest {
 		return new Product( productId, PRODUCT_NAME, PRODUCT_DESCRIPTION, PRODUCT_QUANTITY );
 	}
 
-	private ProductDTO mockProductDTO() {
-		return new ProductDTO( null, PRODUCT_NAME, PRODUCT_DESCRIPTION, PRODUCT_QUANTITY );
+	private ProductDTO mockProductDTO(Long productId) {
+		return new ProductDTO( productId, PRODUCT_NAME, PRODUCT_DESCRIPTION, PRODUCT_QUANTITY );
 	}
 }
