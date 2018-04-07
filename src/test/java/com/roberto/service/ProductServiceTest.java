@@ -1,5 +1,7 @@
 package com.roberto.service;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -36,16 +38,25 @@ public class ProductServiceTest {
 
 	@Test
 	public void save() {
-		service.save( mockProductDTO() );
+		Product product = mockProduct( null );
+		Product savedProduct = mockProduct( PRODUCT_ID );
+		when( repository.save( product ) ).thenReturn( savedProduct );
 
-		verify( repository ).save( mockProduct( null ) );
+		ProductDTO savedProductDTO = service.save( mockProductDTO( null ) );
+
+		verify( repository ).save( product );
+		assertThat( savedProductDTO, equalTo( mockProductDTO( PRODUCT_ID ) ) );
 	}
 
 	@Test
 	public void update() {
-		service.update( PRODUCT_ID, mockProductDTO() );
+		Product product = mockProduct( PRODUCT_ID );
+		when( repository.save( product ) ).thenReturn( product );
+
+		ProductDTO updatedProductDTO = service.update( PRODUCT_ID, mockProductDTO( null ) );
 
 		verify( repository ).save( mockProduct( PRODUCT_ID ) );
+		assertThat( updatedProductDTO, equalTo( mockProductDTO( PRODUCT_ID ) ) );
 	}
 
 	@Test
@@ -86,7 +97,7 @@ public class ProductServiceTest {
 		return new Product( productId, PRODUCT_NAME, PRODUCT_DESCRIPTION, PRODUCT_QUANTITY );
 	}
 
-	private ProductDTO mockProductDTO() {
-		return new ProductDTO( null, PRODUCT_NAME, PRODUCT_DESCRIPTION, PRODUCT_QUANTITY );
+	private ProductDTO mockProductDTO(Long productId) {
+		return new ProductDTO( productId, PRODUCT_NAME, PRODUCT_DESCRIPTION, PRODUCT_QUANTITY );
 	}
 }
