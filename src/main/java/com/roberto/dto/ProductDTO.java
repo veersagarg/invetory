@@ -1,6 +1,7 @@
 package com.roberto.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import com.roberto.model.Product;
  * Created by roberto on 29/08/17.
  */
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductDTO {
