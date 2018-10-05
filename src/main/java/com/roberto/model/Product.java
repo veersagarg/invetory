@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @SequenceGenerator(name = "seq_product", sequenceName = "seq_product", allocationSize = 1)
-public class Product {
+public class Product extends GenericFields {
 
 	@Id
 	@GeneratedValue(generator = "seq_product", strategy = GenerationType.SEQUENCE)
