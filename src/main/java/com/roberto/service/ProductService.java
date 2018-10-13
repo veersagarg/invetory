@@ -32,11 +32,13 @@ public class ProductService {
 	}
 
 	public void delete(Long productId) {
-		repository.delete( productId );
+		repository.deleteById( productId );
 	}
 
 	public ProductDTO findOne(Long productId) {
-		return ProductDTO.of( repository.findOne( productId ) );
+		return repository.findById( productId )
+				.map( ProductDTO::of )
+				.orElse( null );
 	}
 
 	public List<ProductDTO> findByName(String name) {

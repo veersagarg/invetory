@@ -3,11 +3,13 @@ package com.roberto.service;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -63,16 +65,25 @@ public class ProductServiceTest {
 	public void delete() {
 		service.delete( PRODUCT_ID );
 
-		verify( repository ).delete( PRODUCT_ID );
+		verify( repository ).deleteById( PRODUCT_ID );
 	}
 
 	@Test
 	public void get() {
-		when( repository.findOne( PRODUCT_ID ) ).thenReturn( mockProduct( PRODUCT_ID ) );
+		when( repository.findById( PRODUCT_ID ) ).thenReturn( Optional.of( mockProduct( PRODUCT_ID ) ) );
 
 		ProductDTO productDTO = service.findOne( PRODUCT_ID );
 
 		assertProduct( productDTO );
+	}
+
+	@Test
+	public void getWhenIsEmpty() {
+		when( repository.findById( PRODUCT_ID ) ).thenReturn( Optional.empty() );
+
+		ProductDTO productDTO = service.findOne( PRODUCT_ID );
+
+		assertNull( productDTO );
 	}
 
 	@Test
