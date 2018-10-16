@@ -1,4 +1,4 @@
-FROM maven:3.5.2-jdk-8-alpine
+FROM maven:3.5.4-jdk-10
 
 COPY . /build
 RUN cd /build && mvn clean install && mkdir /inventory && cp /build/target/inventory*.jar /inventory/app.jar
